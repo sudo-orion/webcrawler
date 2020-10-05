@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(MockitoExtension.class)
 public class CrawlServiceTest {
 
@@ -32,6 +34,9 @@ public class CrawlServiceTest {
 
     @Mock
     private CrawlStatusService crawlStatusService;
+
+    @Mock
+    private CrawlResultService crawlResultService;
 
     @InjectMocks
     private CrawlService crawlService;
@@ -48,7 +53,7 @@ public class CrawlServiceTest {
         String url = "example.com";
         Mockito.doReturn(Mono.just(true)).when(crawlStatusService).markUrlAsPending(crawlCaptor.capture());
         Mockito.doAnswer(invocation -> Mono.just(crawlCaptor.getValue())).when(schedulerService)
-                .scheduleCrawl(Mockito.any());
+                .scheduleCrawl(any());
 
         this.crawlService.startCrawl(url)
                 .subscribe(crawl -> {
@@ -73,9 +78,10 @@ public class CrawlServiceTest {
 
         Mockito.doReturn(Mono.just(true)).when(crawlStatusService).markUrlAsVisited(crawlCaptor.capture());
         Mockito.doReturn(Mono.just(new CrawlVisitedTotals(0, 1))).when(crawlStatusService)
-                .getVisitedTotals(Mockito.any());
+                .getVisitedTotals(any());
 
         Mockito.doReturn(Mono.just(false)).when(crawlStatusService).isUrlKnown(outboundCrawlCaptor.capture());
+        Mockito.doReturn(Mono.just(true)).when(crawlResultService).ingest(any(), any());
         Mockito.doReturn(Mono.just(true)).when(crawlStatusService).markUrlAsPending(Mockito.argThat((crawl) -> {
             return crawl.equals(outboundCrawlCaptor.getValue());
         }));
@@ -107,9 +113,10 @@ public class CrawlServiceTest {
 
         Mockito.doReturn(Mono.just(true)).when(crawlStatusService).markUrlAsVisited(crawlCaptor.capture());
         Mockito.doReturn(Mono.just(new CrawlVisitedTotals(0, 1))).when(crawlStatusService)
-                .getVisitedTotals(Mockito.any());
+                .getVisitedTotals(any());
 
         Mockito.doReturn(Mono.just(false)).when(crawlStatusService).isUrlKnown(outboundCrawlCaptor.capture());
+        Mockito.doReturn(Mono.just(true)).when(crawlResultService).ingest(any(), any());
         Mockito.doReturn(Mono.just(true)).when(crawlStatusService).markUrlAsPending(Mockito.argThat((crawl) -> {
             return crawl.equals(outboundCrawlCaptor.getValue());
         }));
