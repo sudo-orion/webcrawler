@@ -13,8 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class CrawlResultService {
-    private ConcurrentMap<String, CrawlResult> crawls =
-            new ConcurrentHashMap<>();
+    private ConcurrentMap<String, CrawlResult> crawls = new ConcurrentHashMap<>();
 
     public Mono<CrawlResult> getCrawlResultById(String id) {
         CrawlResult result = this.crawls.get(id);

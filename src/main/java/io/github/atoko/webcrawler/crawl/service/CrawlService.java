@@ -66,10 +66,10 @@ public class CrawlService {
                                 .flatMap((visited) -> {
                                     if (!visited && crawl.isWithinSameDomain(outboundCrawl)) {
                                         return crawlStatusService
-                                            .markUrlAsPending(outboundCrawl)
-                                            .flatMap(marked ->
-                                                    this.schedulerService.scheduleCrawl(outboundCrawl)
-                                            );
+                                                .markUrlAsPending(outboundCrawl)
+                                                .flatMap(marked ->
+                                                        this.schedulerService.scheduleCrawl(outboundCrawl)
+                                                );
                                     } else {
                                         return Mono.empty();
                                     }
